@@ -1,0 +1,4 @@
+<resources>
+  <!--  Main -->
+  <dimen name="main_button_margin">8dp</dimen>
+</resources>
