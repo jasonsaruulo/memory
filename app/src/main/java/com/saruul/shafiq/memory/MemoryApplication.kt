@@ -13,10 +13,7 @@ class MemoryApplication : Application(), HasActivityInjector {
 
     override fun onCreate() {
         super.onCreate()
-        DaggerMemoryApplicationComponent.builder()
-                .application(this)
-                .build()
-                .inject(this)
+        DaggerMemoryApplicationComponent.create().inject(this)
     }
 
     override fun activityInjector(): DispatchingAndroidInjector<Activity>? {

@@ -37,4 +37,5 @@ dependencies {
     kapt 'com.google.dagger:dagger-android-processor:2.13'
     implementation 'com.jakewharton:butterknife:8.8.1'
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
