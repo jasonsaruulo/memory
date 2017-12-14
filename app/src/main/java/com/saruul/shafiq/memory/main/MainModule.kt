@@ -19,7 +19,7 @@ class MainModule {
     }
 
     @Provides
-    fun provideIntegerSet(): MutableSet<Int> {
-        return mutableSetOf()
+    fun provideStringList(): MutableList<String> {
+        return mutableListOf()
     }
 }

@@ -6,11 +6,20 @@
     android:layout_height="match_parent"
     tools:context="com.saruul.shafiq.memory.main.MainActivity">
 
+    <ProgressBar
+        android:id="@+id/main_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
     <TextView
         android:id="@+id/main_permission_explanation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:text="@string/main_read_external_storage_permission_explanation"
         android:gravity="center" />
 
     <Button
@@ -34,21 +43,18 @@
             android:layout_weight="1"
             android:gravity="center">
 
-            <ImageView
+            <com.saruul.shafiq.memory.main.MemoryCardView
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
-            <ImageView
+            <com.saruul.shafiq.memory.main.MemoryCardView
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
-            <ImageView
+            <com.saruul.shafiq.memory.main.MemoryCardView
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
         </TableRow>
@@ -59,21 +65,18 @@
             android:layout_weight="1"
             android:gravity="center">
 
-            <ImageView
+            <com.saruul.shafiq.memory.main.MemoryCardView
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
-            <ImageView
+            <com.saruul.shafiq.memory.main.MemoryCardView
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
-            <ImageView
+            <com.saruul.shafiq.memory.main.MemoryCardView
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
         </TableRow>
@@ -84,21 +87,18 @@
             android:layout_weight="1"
             android:gravity="center">
 
-            <ImageView
+            <com.saruul.shafiq.memory.main.MemoryCardView
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
-            <ImageView
+            <com.saruul.shafiq.memory.main.MemoryCardView
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
-            <ImageView
+            <com.saruul.shafiq.memory.main.MemoryCardView
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
         </TableRow>
