@@ -143,8 +143,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadImage(memoryCardView: MemoryCardView) {
-        memoryCardView.placeholder.visibility = View.VISIBLE
-        memoryCardView.content.visibility = View.INVISIBLE
+        memoryCardView.placeholder.alpha = 1f
+        memoryCardView.content.alpha = 0f
         if (filePaths.isEmpty()) {
             // TODO: Show error message
             showGameBoard()
@@ -173,8 +173,6 @@ class MainActivity : AppCompatActivity() {
     private fun imageLoaded(memoryCardView: MemoryCardView, bitmap: Bitmap?) {
         numberOfImagesLoaded++
         memoryCardView.content.setImageBitmap(bitmap)
-        memoryCardView.content.visibility = View.VISIBLE
-        memoryCardView.placeholder.visibility = View.INVISIBLE
         if (numberOfImagesLoaded == numberOfMemoryCards) {
             showGameBoard()
             // TODO: Start the game
