@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var picasso: Picasso
     @Inject
     lateinit var filePaths: MutableList<String>
-    private val numberOfMemoryCards = 9
+    private val numberOfMemoryCards = 12
     private var numberOfImagesLoaded = 0
 
     @BindView(R.id.main_progress_bar) lateinit var progressBar: View
