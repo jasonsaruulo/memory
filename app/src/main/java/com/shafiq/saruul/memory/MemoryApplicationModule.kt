@@ -1,7 +1,7 @@
-package com.saruul.shafiq.memory
+package com.shafiq.saruul.memory
 
-import com.saruul.shafiq.memory.main.MainActivity
-import com.saruul.shafiq.memory.main.MainModule
+import com.shafiq.saruul.memory.main.MainActivity
+import com.shafiq.saruul.memory.main.MainModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

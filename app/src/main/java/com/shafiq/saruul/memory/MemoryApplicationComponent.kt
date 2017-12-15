@@ -1,4 +1,4 @@
-package com.saruul.shafiq.memory
+package com.shafiq.saruul.memory
 
 import dagger.Component
 import dagger.android.AndroidInjectionModule

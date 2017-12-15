@@ -1,4 +1,4 @@
-package com.saruul.shafiq.memory
+package com.shafiq.saruul.memory
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

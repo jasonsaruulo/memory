@@ -1,4 +1,4 @@
-package com.saruul.shafiq.memory.main
+package com.shafiq.saruul.memory.main
 
 import dagger.Subcomponent
 

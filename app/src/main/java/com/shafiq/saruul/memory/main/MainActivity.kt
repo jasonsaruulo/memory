@@ -1,4 +1,4 @@
-package com.saruul.shafiq.memory.main
+package com.shafiq.saruul.memory.main
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -15,7 +15,7 @@ import android.widget.TableRow
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import com.saruul.shafiq.memory.R
+import com.shafiq.saruul.memory.R
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import dagger.android.AndroidInjection

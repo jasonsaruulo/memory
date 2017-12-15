@@ -1,4 +1,4 @@
-package com.saruul.shafiq.memory.main
+package com.shafiq.saruul.memory.main
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.saruul.shafiq.memory.R
+import com.shafiq.saruul.memory.R
 
 class MemoryCardView: FrameLayout {
 
