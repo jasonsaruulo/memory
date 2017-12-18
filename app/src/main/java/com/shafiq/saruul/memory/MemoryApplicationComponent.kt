@@ -1,8 +1,10 @@
 package com.shafiq.saruul.memory
 
 import dagger.Component
-import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
+import javax.inject.Singleton
 
-@Component(modules = arrayOf(AndroidInjectionModule::class, MemoryApplicationModule::class))
+@Singleton
+@Component(modules = arrayOf(AndroidSupportInjectionModule::class, MemoryApplicationModule::class))
 interface MemoryApplicationComponent : AndroidInjector<MemoryApplication>

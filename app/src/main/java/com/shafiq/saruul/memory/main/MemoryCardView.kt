@@ -27,12 +27,9 @@ class MemoryCardView: FrameLayout {
         val view = LayoutInflater.from(context)
                 .inflate(R.layout.memory_card_view, this, true)
         ButterKnife.bind(this, view)
-        setOnClickListener {
-            flip()
-        }
     }
 
-    private fun flip() {
+    fun flip() {
         if (content.drawable == null) {
             return
         }

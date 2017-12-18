@@ -8,6 +8,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class MemoryApplicationModule {
 
+    @ActivityScoped
     @ContributesAndroidInjector(modules = arrayOf(MainModule::class))
     abstract fun contributeMainActivityInjector(): MainActivity
 }
