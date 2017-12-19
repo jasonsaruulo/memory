@@ -16,6 +16,7 @@ class MainPresenter @Inject constructor(val random: Random,
     private var view: MainContract.View? = null
     private val numberOfMemoryCards = 12
     private var numberOfImagesLoaded = 0
+    private val memoryCardIndexesMapping = mutableMapOf<Int, Int>()
 
     override fun takeView(view: MainContract.View) {
         this.view = view
@@ -78,8 +79,13 @@ class MainPresenter @Inject constructor(val random: Random,
             resetUnusedIndexes()
             var i = 0
             while (i < numberOfMemoryCards) {
-                loadImage(unusedMemoryCardIndex())
-                i++
+                val filePath = unusedFilePath()
+                val firstIndex = unusedMemoryCardIndex()
+                val secondIndex = unusedMemoryCardIndex()
+                memoryCardIndexesMapping[firstIndex] = secondIndex
+                view?.loadImage(firstIndex, filePath)
+                view?.loadImage(secondIndex, filePath)
+                i += 2
             }
         } else {
             // TODO: Show error message
@@ -95,15 +101,6 @@ class MainPresenter @Inject constructor(val random: Random,
         }
     }
 
-    private fun loadImage(memoryCardIndex: Int) {
-        if (filePaths.isEmpty()) {
-            // TODO: Show error message
-            showGameBoard()
-            return
-        }
-        view?.loadImage(memoryCardIndex, unusedFilePath())
-    }
-
     override fun onImageLoaded(success: Boolean, memoryCardIndex: Int) {
         if (success) {
             numberOfImagesLoaded++
@@ -112,8 +109,17 @@ class MainPresenter @Inject constructor(val random: Random,
                 // TODO: Start the game
             }
         } else {
-            // TODO: Load image
-            loadImage(memoryCardIndex)
+            if (memoryCardIndexesMapping.contains(memoryCardIndex)) {
+                if (filePaths.isEmpty()) {
+                    // TODO: Show error
+                } else {
+                    // TODO: Load another image
+                    val filePath = unusedFilePath()
+                    val secondIndex = memoryCardIndexesMapping.getValue(memoryCardIndex)
+                    view?.loadImage(memoryCardIndex, filePath)
+                    view?.loadImage(secondIndex, filePath)
+                }
+            }
         }
     }
 
