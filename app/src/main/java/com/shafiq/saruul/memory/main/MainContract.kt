@@ -7,7 +7,7 @@ interface MainContract {
 
     interface View {
 
-        fun setImage(memoryCardIndex: Int, bitmap: Bitmap?)
+        fun loadImage(memoryCardIndex: Int, filePath: String)
 
         fun showPermissionExplanation()
 
@@ -35,6 +35,8 @@ interface MainContract {
 
         fun loadImages()
 
-        fun memoryCardClicked(memoryCardIndex: Int)
+        fun onImageLoaded(success: Boolean, memoryCardIndex: Int)
+
+        fun onMemoryCardClicked(memoryCardIndex: Int)
     }
 }

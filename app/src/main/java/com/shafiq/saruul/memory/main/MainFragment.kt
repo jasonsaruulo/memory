@@ -1,6 +1,6 @@
 package com.shafiq.saruul.memory.main
 
-import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +10,11 @@ import android.widget.TableRow
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.shafiq.saruul.memory.ActivityScoped
 import com.shafiq.saruul.memory.R
 import dagger.android.support.DaggerFragment
@@ -32,9 +37,9 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     lateinit var newGame: View
 
     override fun onCreateView(
-            inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        val view = inflater!!.inflate(R.layout.fragment_main, container, false)
+        val view = inflater.inflate(R.layout.fragment_main, container, false)
         ButterKnife.bind(this, view)
         var i = 0
         while (i < gameBoard.childCount) {
@@ -43,7 +48,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
             while (j < row.childCount) {
                 val memoryCard = row.getChildAt(j) as MemoryCardView
                 memoryCard.setOnClickListener({
-                    presenter.memoryCardClicked(memoryCards.indexOf(memoryCard))
+                    presenter.onMemoryCardClicked(memoryCards.indexOf(memoryCard))
                 })
                 memoryCards.add(memoryCard)
                 j++
@@ -84,8 +89,22 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         newGame.visibility = View.VISIBLE
     }
 
-    override fun setImage(memoryCardIndex: Int, bitmap: Bitmap?) {
-        memoryCards[memoryCardIndex].content.setImageBitmap(bitmap)
+    override fun loadImage(memoryCardIndex: Int, filePath: String) {
+        val listener = object : RequestListener<Drawable> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                presenter.onImageLoaded(false, memoryCardIndex)
+                return false
+            }
+
+            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                presenter.onImageLoaded(true, memoryCardIndex)
+                return false
+            }
+        }
+        Glide.with(this)
+                .load(filePath)
+                .listener(listener)
+                .into(memoryCards[memoryCardIndex].content)
     }
 
     @OnClick(R.id.main_new_game)

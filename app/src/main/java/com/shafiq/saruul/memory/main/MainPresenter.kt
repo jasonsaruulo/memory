@@ -1,19 +1,13 @@
 package com.shafiq.saruul.memory.main
 
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import com.shafiq.saruul.memory.handlers.PermissionHandler
 import com.shafiq.saruul.memory.handlers.StorageHandler
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
-import java.util.*
+import java.util.Random
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(val random: Random,
-                                        val picasso: Picasso,
                                         val filePaths: MutableList<String>,
-                                        val picassoTargets: MutableMap<String, Target>,
                                         val unusedMemoryCardIndexes: MutableList<Int>,
                                         val permissionHandler: PermissionHandler,
                                         val storageHandler: StorageHandler):
@@ -84,7 +78,7 @@ class MainPresenter @Inject constructor(val random: Random,
             resetUnusedIndexes()
             var i = 0
             while (i < numberOfMemoryCards) {
-                loadImage()
+                loadImage(unusedMemoryCardIndex())
                 i++
             }
         } else {
@@ -101,38 +95,25 @@ class MainPresenter @Inject constructor(val random: Random,
         }
     }
 
-    private fun loadImage() {
+    private fun loadImage(memoryCardIndex: Int) {
         if (filePaths.isEmpty()) {
             // TODO: Show error message
             showGameBoard()
             return
         }
-        val filePath = unusedFilePath()
-        val target = object : Target {
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-            }
-
-            override fun onBitmapFailed(errorDrawable: Drawable?) {
-                // TODO: Handle failure better instead of continuously loading images
-                picassoTargets.remove(filePath)
-                loadImage()
-            }
-
-            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                picassoTargets.remove(filePath)
-                imageLoaded(bitmap)
-            }
-        }
-        picassoTargets.put(filePath, target)
-        picasso.load(filePath).into(target)
+        view?.loadImage(memoryCardIndex, unusedFilePath())
     }
 
-    private fun imageLoaded(bitmap: Bitmap?) {
-        numberOfImagesLoaded++
-        view?.setImage(unusedMemoryCardIndex(), bitmap)
-        if (numberOfImagesLoaded == numberOfMemoryCards) {
-            showGameBoard()
-            // TODO: Start the game
+    override fun onImageLoaded(success: Boolean, memoryCardIndex: Int) {
+        if (success) {
+            numberOfImagesLoaded++
+            if (numberOfImagesLoaded == numberOfMemoryCards) {
+                showGameBoard()
+                // TODO: Start the game
+            }
+        } else {
+            // TODO: Load image
+            loadImage(memoryCardIndex)
         }
     }
 
@@ -154,7 +135,7 @@ class MainPresenter @Inject constructor(val random: Random,
         return random.nextInt(max)
     }
 
-    override fun memoryCardClicked(memoryCardIndex: Int) {
+    override fun onMemoryCardClicked(memoryCardIndex: Int) {
         view?.flipMemoryCard(memoryCardIndex)
     }
 }

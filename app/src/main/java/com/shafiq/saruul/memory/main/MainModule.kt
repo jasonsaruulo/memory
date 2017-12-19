@@ -6,13 +6,11 @@ import com.shafiq.saruul.memory.handlers.MemoryPermissionHandler
 import com.shafiq.saruul.memory.handlers.MemoryStorageHandler
 import com.shafiq.saruul.memory.handlers.PermissionHandler
 import com.shafiq.saruul.memory.handlers.StorageHandler
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
-import java.util.*
+import java.util.Random
 
 @Module
 abstract class MainModule {
@@ -24,12 +22,6 @@ abstract class MainModule {
         @Provides
         fun provideRandom(): Random {
             return Random()
-        }
-
-        @JvmStatic
-        @Provides
-        fun providePicasso(mainActivity: MainActivity): Picasso {
-            return Picasso.with(mainActivity)
         }
 
         @JvmStatic
