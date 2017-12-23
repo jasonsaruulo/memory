@@ -19,6 +19,7 @@ class MainPresenter @Inject constructor(private val random: Random,
     private val memoryCardIndexesMapping = mutableMapOf<Int, Int>()
     private val flippedMemoryCardIndexes = mutableSetOf<Int>()
     private val maxNumberOfFlippedMemoryCards = 2
+    private var numberOfTurns = 0
 
     override fun takeView(view: MainContract.View) {
         this.view = view
@@ -41,6 +42,7 @@ class MainPresenter @Inject constructor(private val random: Random,
     }
 
     override fun newGame() {
+        // TODO: Reset game
         if (!permissionHandler.permissionReadExternalStorageGranted()) {
             if (permissionHandler.shouldShowRequestPermissionRationale()) {
                 showPermissionExplanation()
@@ -153,6 +155,10 @@ class MainPresenter @Inject constructor(private val random: Random,
         }
         if (flipped) {
             return
+        }
+        if (flippedMemoryCardIndexes.isEmpty()) {
+            numberOfTurns++
+            view?.numberOfTurns(numberOfTurns)
         }
         flippedMemoryCardIndexes.add(memoryCardIndex)
         view?.flipMemoryCard(memoryCardIndex)

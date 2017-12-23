@@ -1,4 +1,5 @@
 <resources>
   <!--  Main -->
+  <dimen name="main_number_of_turns_margin">8dp</dimen>
   <dimen name="main_button_margin">8dp</dimen>
 </resources>

@@ -28,11 +28,20 @@
         android:layout_margin="@dimen/main_button_margin"
         android:text="@string/main_new_game" />
 
+    <TextView
+        android:id="@+id/main_number_of_turns"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/main_number_of_turns_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TableLayout
         android:id="@+id/main_game_board"
         android:stretchColumns="*"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/main_number_of_turns"
         android:layout_above="@id/main_new_game">
 
         <TableRow

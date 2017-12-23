@@ -1,6 +1,5 @@
 package com.shafiq.saruul.memory.main
 
-import android.graphics.Bitmap
 import com.shafiq.saruul.memory.BasePresenter
 
 interface MainContract {
@@ -16,6 +15,8 @@ interface MainContract {
         fun showGameBoard()
 
         fun flipMemoryCard(memoryCardIndex: Int)
+
+        fun numberOfTurns(numberOfTurns: Int)
     }
 
     interface Presenter: BasePresenter<View> {

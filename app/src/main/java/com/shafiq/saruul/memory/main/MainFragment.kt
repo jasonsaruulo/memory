@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TableRow
+import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -31,6 +32,8 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     lateinit var progressBar: View
     @BindView(R.id.main_permission_explanation)
     lateinit var permissionExplanation: View
+    @BindView(R.id.main_number_of_turns)
+    lateinit var numberOfTurns: TextView
     @BindView(R.id.main_game_board)
     lateinit var gameBoard: TableLayout
     @BindView(R.id.main_new_game)
@@ -55,6 +58,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
             }
             i++
         }
+        numberOfTurns(0)
         return view
     }
 
@@ -71,6 +75,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     override fun showPermissionExplanation() {
         progressBar.visibility = View.INVISIBLE
         permissionExplanation.visibility = View.VISIBLE
+        numberOfTurns.visibility = View.INVISIBLE
         gameBoard.visibility = View.INVISIBLE
         newGame.visibility = View.VISIBLE
     }
@@ -78,6 +83,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     override fun showProgressBar() {
         progressBar.visibility = View.VISIBLE
         permissionExplanation.visibility = View.INVISIBLE
+        numberOfTurns.visibility = View.INVISIBLE
         gameBoard.visibility = View.INVISIBLE
         newGame.visibility = View.INVISIBLE
     }
@@ -85,6 +91,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     override fun showGameBoard() {
         progressBar.visibility = View.INVISIBLE
         permissionExplanation.visibility = View.INVISIBLE
+        numberOfTurns.visibility = View.VISIBLE
         gameBoard.visibility = View.VISIBLE
         newGame.visibility = View.VISIBLE
     }
@@ -114,5 +121,9 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
 
     override fun flipMemoryCard(memoryCardIndex: Int) {
         memoryCards[memoryCardIndex].flip()
+    }
+
+    override fun numberOfTurns(numberOfTurns: Int) {
+        this.numberOfTurns.text = resources.getString(R.string.main_number_of_turns, numberOfTurns)
     }
 }
