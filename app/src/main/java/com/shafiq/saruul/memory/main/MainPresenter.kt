@@ -42,7 +42,9 @@ class MainPresenter @Inject constructor(private val random: Random,
     }
 
     override fun newGame() {
-        // TODO: Reset game
+        numberOfTurns = 0
+        view?.numberOfTurns(numberOfTurns)
+        flipBackFlippedMemoryCards()
         if (!permissionHandler.permissionReadExternalStorageGranted()) {
             if (permissionHandler.shouldShowRequestPermissionRationale()) {
                 showPermissionExplanation()
@@ -148,10 +150,7 @@ class MainPresenter @Inject constructor(private val random: Random,
     override fun onMemoryCardClicked(memoryCardIndex: Int) {
         val flipped = flippedMemoryCardIndexes.contains(memoryCardIndex)
         if (flippedMemoryCardIndexes.size >= maxNumberOfFlippedMemoryCards) {
-            for (index in flippedMemoryCardIndexes) {
-                view?.flipMemoryCard(index)
-            }
-            flippedMemoryCardIndexes.clear()
+            flipBackFlippedMemoryCards()
         }
         if (flipped) {
             return
@@ -162,5 +161,12 @@ class MainPresenter @Inject constructor(private val random: Random,
         }
         flippedMemoryCardIndexes.add(memoryCardIndex)
         view?.flipMemoryCard(memoryCardIndex)
+    }
+
+    private fun flipBackFlippedMemoryCards() {
+        for (index in flippedMemoryCardIndexes) {
+            view?.flipMemoryCard(index)
+        }
+        flippedMemoryCardIndexes.clear()
     }
 }
