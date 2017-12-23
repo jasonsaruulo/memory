@@ -6,17 +6,19 @@ import com.shafiq.saruul.memory.handlers.StorageHandler
 import java.util.Random
 import javax.inject.Inject
 
-class MainPresenter @Inject constructor(val random: Random,
-                                        val filePaths: MutableList<String>,
-                                        val unusedMemoryCardIndexes: MutableList<Int>,
-                                        val permissionHandler: PermissionHandler,
-                                        val storageHandler: StorageHandler):
+class MainPresenter @Inject constructor(private val random: Random,
+                                        private val filePaths: MutableList<String>,
+                                        private val unusedMemoryCardIndexes: MutableList<Int>,
+                                        private val permissionHandler: PermissionHandler,
+                                        private val storageHandler: StorageHandler):
         MainContract.Presenter {
 
     private var view: MainContract.View? = null
     private val numberOfMemoryCards = 12
     private var numberOfImagesLoaded = 0
     private val memoryCardIndexesMapping = mutableMapOf<Int, Int>()
+    private val flippedMemoryCardIndexes = mutableSetOf<Int>()
+    private val maxNumberOfFlippedMemoryCards = 2
 
     override fun takeView(view: MainContract.View) {
         this.view = view
@@ -142,6 +144,17 @@ class MainPresenter @Inject constructor(val random: Random,
     }
 
     override fun onMemoryCardClicked(memoryCardIndex: Int) {
+        val flipped = flippedMemoryCardIndexes.contains(memoryCardIndex)
+        if (flippedMemoryCardIndexes.size >= maxNumberOfFlippedMemoryCards) {
+            for (index in flippedMemoryCardIndexes) {
+                view?.flipMemoryCard(index)
+            }
+            flippedMemoryCardIndexes.clear()
+        }
+        if (flipped) {
+            return
+        }
+        flippedMemoryCardIndexes.add(memoryCardIndex)
         view?.flipMemoryCard(memoryCardIndex)
     }
 }
