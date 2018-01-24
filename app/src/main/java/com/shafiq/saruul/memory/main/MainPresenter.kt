@@ -17,7 +17,8 @@ class MainPresenter @Inject constructor(private val random: Random,
     private val numberOfMemoryCards = 12
     private var numberOfImagesLoaded = 0
     private val memoryCardIndexesMapping = mutableMapOf<Int, Int>()
-    private val flippedMemoryCardIndexes = mutableSetOf<Int>()
+    private val currentlyFlippedMemoryCardIndexes = mutableSetOf<Int>()
+    private val rightFlippedMemoryCardIndexes = mutableSetOf<Int>()
     private val maxNumberOfFlippedMemoryCards = 2
     private var numberOfTurns = 0
 
@@ -44,7 +45,9 @@ class MainPresenter @Inject constructor(private val random: Random,
     override fun newGame() {
         numberOfTurns = 0
         view?.numberOfTurns(numberOfTurns)
-        flipBackFlippedMemoryCards()
+        memoryCardIndexesMapping.clear()
+        flipBackCurrentlyFlippedMemoryCards()
+        flipBackRightFlippedMemoryCards()
         if (!permissionHandler.permissionReadExternalStorageGranted()) {
             if (permissionHandler.shouldShowRequestPermissionRationale()) {
                 showPermissionExplanation()
@@ -112,14 +115,12 @@ class MainPresenter @Inject constructor(private val random: Random,
             numberOfImagesLoaded++
             if (numberOfImagesLoaded == numberOfMemoryCards) {
                 showGameBoard()
-                // TODO: Start the game
             }
         } else {
             if (memoryCardIndexesMapping.contains(memoryCardIndex)) {
                 if (filePaths.isEmpty()) {
                     // TODO: Show error
                 } else {
-                    // TODO: Load another image
                     val filePath = unusedFilePath()
                     val secondIndex = memoryCardIndexesMapping.getValue(memoryCardIndex)
                     view?.loadImage(memoryCardIndex, filePath)
@@ -148,25 +149,52 @@ class MainPresenter @Inject constructor(private val random: Random,
     }
 
     override fun onMemoryCardClicked(memoryCardIndex: Int) {
-        val flipped = flippedMemoryCardIndexes.contains(memoryCardIndex)
-        if (flippedMemoryCardIndexes.size >= maxNumberOfFlippedMemoryCards) {
-            flipBackFlippedMemoryCards()
+        if (rightFlippedMemoryCardIndexes.contains(memoryCardIndex)) {
+            return
+        }
+        val flipped = currentlyFlippedMemoryCardIndexes.contains(memoryCardIndex)
+        if (currentlyFlippedMemoryCardIndexes.size >= maxNumberOfFlippedMemoryCards) {
+            flipBackCurrentlyFlippedMemoryCards()
         }
         if (flipped) {
             return
         }
-        if (flippedMemoryCardIndexes.isEmpty()) {
+        if (currentlyFlippedMemoryCardIndexes.isEmpty()) {
             numberOfTurns++
             view?.numberOfTurns(numberOfTurns)
         }
-        flippedMemoryCardIndexes.add(memoryCardIndex)
         view?.flipMemoryCard(memoryCardIndex)
+        currentlyFlippedMemoryCardIndexes.add(memoryCardIndex)
+
+        var match = false
+        for (flippedIndex in currentlyFlippedMemoryCardIndexes) {
+            if (memoryCardIndexesMapping.contains(flippedIndex)) {
+                val secondIndex = memoryCardIndexesMapping.getValue(flippedIndex)
+                if(currentlyFlippedMemoryCardIndexes.contains(secondIndex)) {
+                    match = true
+                    rightFlippedMemoryCardIndexes.add(flippedIndex)
+                    rightFlippedMemoryCardIndexes.add(secondIndex)
+                    break
+                }
+            }
+        }
+        if (match) {
+            currentlyFlippedMemoryCardIndexes.clear()
+        }
     }
 
-    private fun flipBackFlippedMemoryCards() {
-        for (index in flippedMemoryCardIndexes) {
+    private fun flipBackCurrentlyFlippedMemoryCards() {
+        flipMemoryCards(currentlyFlippedMemoryCardIndexes)
+    }
+
+    private fun flipBackRightFlippedMemoryCards() {
+        flipMemoryCards(rightFlippedMemoryCardIndexes)
+    }
+
+    private fun flipMemoryCards(indexes: MutableSet<Int>) {
+        for (index in indexes) {
             view?.flipMemoryCard(index)
         }
-        flippedMemoryCardIndexes.clear()
+        indexes.clear()
     }
 }
