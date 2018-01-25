@@ -17,6 +17,10 @@ interface MainContract {
         fun flipMemoryCard(memoryCardIndex: Int)
 
         fun numberOfTurns(numberOfTurns: Int)
+
+        fun expandMemoryCard(memoryCardIndex: Int)
+
+        fun minimizeMemoryCard(memoryCardIndex: Int)
     }
 
     interface Presenter: BasePresenter<View> {
@@ -39,5 +43,7 @@ interface MainContract {
         fun onImageLoaded(success: Boolean, memoryCardIndex: Int)
 
         fun onMemoryCardClicked(memoryCardIndex: Int)
+
+        fun onExpandedViewClicked(memoryCardIndex: Int)
     }
 }

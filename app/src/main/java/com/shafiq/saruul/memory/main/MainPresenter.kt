@@ -149,15 +149,13 @@ class MainPresenter @Inject constructor(private val random: Random,
     }
 
     override fun onMemoryCardClicked(memoryCardIndex: Int) {
-        if (rightFlippedMemoryCardIndexes.contains(memoryCardIndex)) {
+        if (rightFlippedMemoryCardIndexes.contains(memoryCardIndex) ||
+                currentlyFlippedMemoryCardIndexes.contains(memoryCardIndex)) {
+            view?.expandMemoryCard(memoryCardIndex)
             return
         }
-        val flipped = currentlyFlippedMemoryCardIndexes.contains(memoryCardIndex)
         if (currentlyFlippedMemoryCardIndexes.size >= maxNumberOfFlippedMemoryCards) {
             flipBackCurrentlyFlippedMemoryCards()
-        }
-        if (flipped) {
-            return
         }
         if (currentlyFlippedMemoryCardIndexes.isEmpty()) {
             numberOfTurns++
@@ -181,6 +179,10 @@ class MainPresenter @Inject constructor(private val random: Random,
         if (match) {
             currentlyFlippedMemoryCardIndexes.clear()
         }
+    }
+
+    override fun onExpandedViewClicked(memoryCardIndex: Int) {
+        view?.minimizeMemoryCard(memoryCardIndex)
     }
 
     private fun flipBackCurrentlyFlippedMemoryCards() {

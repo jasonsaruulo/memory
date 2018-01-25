@@ -1,10 +1,17 @@
 package com.shafiq.saruul.memory.main
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.graphics.Point
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import android.widget.ImageView
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -19,6 +26,7 @@ import com.bumptech.glide.request.target.Target
 import com.shafiq.saruul.memory.ActivityScoped
 import com.shafiq.saruul.memory.R
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_main.*
 import javax.inject.Inject
 
 @ActivityScoped
@@ -38,6 +46,10 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     lateinit var gameBoard: TableLayout
     @BindView(R.id.main_new_game)
     lateinit var newGame: View
+    @BindView(R.id.main_expanded_image)
+    lateinit var expandedImage: ImageView
+    private var currentExpandedImageAnimator: Animator? = null
+    private var expandImageAnimationDuration: Long? = null
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -50,15 +62,17 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
             var j = 0
             while (j < row.childCount) {
                 val memoryCard = row.getChildAt(j) as MemoryCardView
-                memoryCard.setOnClickListener({
+                memoryCard.setOnClickListener {
                     presenter.onMemoryCardClicked(memoryCards.indexOf(memoryCard))
-                })
+                }
                 memoryCards.add(memoryCard)
                 j++
             }
             i++
         }
         numberOfTurns(0)
+        expandImageAnimationDuration =
+                resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
         return view
     }
 
@@ -125,5 +139,132 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
 
     override fun numberOfTurns(numberOfTurns: Int) {
         this.numberOfTurns.text = resources.getString(R.string.main_number_of_turns, numberOfTurns)
+    }
+
+    override fun expandMemoryCard(memoryCardIndex: Int) {
+        val memoryCard = memoryCards[memoryCardIndex]
+
+        currentExpandedImageAnimator?.cancel()
+        expandedImage.setImageDrawable(memoryCard.content.drawable)
+
+        val startBounds = Rect()
+        val finalBounds = Rect()
+
+        val startScale = adjustBounds(memoryCardIndex, startBounds, finalBounds)
+        memoryCard.alpha = 0f
+        expandedImage.visibility = View.VISIBLE
+
+        expandedImage.pivotX = 0f
+        expandedImage.pivotY = 0f
+
+        // For better readability
+        val startLeft = startBounds.left.toFloat()
+        val finalLeft = finalBounds.left.toFloat()
+        val startTop = startBounds.top.toFloat()
+        val finalTop = finalBounds.top.toFloat()
+
+        val set = AnimatorSet()
+        set.play(ObjectAnimator.ofFloat(expandedImage, View.X, startLeft, finalLeft))
+                .with(ObjectAnimator.ofFloat(expandedImage, View.Y, startTop, finalTop))
+                .with(ObjectAnimator.ofFloat(expandedImage, View.SCALE_X, startScale, 1f))
+                .with(ObjectAnimator.ofFloat(expandedImage, View.SCALE_Y, startScale, 1f))
+        if (expandImageAnimationDuration != null) {
+            set.duration = expandImageAnimationDuration!!
+        }
+        set.interpolator = DecelerateInterpolator()
+        set.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationEnd(p0: Animator?) {
+                currentExpandedImageAnimator = null
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+                currentExpandedImageAnimator = null
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+            }
+        })
+        set.start()
+        currentExpandedImageAnimator = set
+        expandedImage.setOnClickListener {
+            presenter.onExpandedViewClicked(memoryCardIndex)
+        }
+    }
+
+    override fun minimizeMemoryCard(memoryCardIndex: Int) {
+        currentExpandedImageAnimator?.cancel()
+
+        val startBounds = Rect()
+        val finalBounds = Rect()
+
+        val startScale = adjustBounds(memoryCardIndex, startBounds, finalBounds)
+        // For better readability
+        val startLeft = startBounds.left.toFloat()
+        val startTop = startBounds.top.toFloat()
+
+        val set = AnimatorSet()
+        set.play(ObjectAnimator.ofFloat(expandedImage, View.X, startLeft))
+                .with(ObjectAnimator.ofFloat(expandedImage, View.Y, startTop))
+                .with(ObjectAnimator.ofFloat(expandedImage, View.SCALE_X, startScale))
+                .with(ObjectAnimator.ofFloat(expandedImage, View.SCALE_Y, startScale))
+        if (expandImageAnimationDuration != null) {
+            set.duration = expandImageAnimationDuration!!
+        }
+        set.interpolator = DecelerateInterpolator()
+        set.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationEnd(p0: Animator?) {
+                onMinimizeAnimationEnd(memoryCardIndex)
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+                onMinimizeAnimationEnd(memoryCardIndex)
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+            }
+        })
+        set.start()
+        currentExpandedImageAnimator = set
+    }
+
+    private fun onMinimizeAnimationEnd(memoryCardIndex: Int) {
+        memoryCards[memoryCardIndex].alpha = 1f
+        expandedImage.visibility = View.GONE
+        currentExpandedImageAnimator = null
+    }
+
+
+    /**
+     * Adjusts bounds based on given memory card view and returns the start scale of the expanded
+     * image view.
+     */
+    private fun adjustBounds(memoryCardIndex: Int, startBounds: Rect, finalBounds: Rect): Float {
+        val memoryCard = memoryCards[memoryCardIndex]
+        val globalOffset = Point()
+        memoryCard.getGlobalVisibleRect(startBounds)
+        main_container.getGlobalVisibleRect(finalBounds, globalOffset)
+        startBounds.offset(-globalOffset.x, -globalOffset.y)
+        finalBounds.offset(-globalOffset.x, -globalOffset.y)
+        val startScale: Float?
+        if (finalBounds.width()/startBounds.height() > startBounds.width()/startBounds.height()) {
+            startScale = startBounds.height().toFloat()/finalBounds.height().toFloat()
+            val startWidth = startScale * finalBounds.width()
+            val deltaWidth = (startWidth - startBounds.width())/2
+            startBounds.left -= deltaWidth.toInt()
+            startBounds.right += deltaWidth.toInt()
+        } else {
+            startScale = startBounds.width().toFloat() / finalBounds.width().toFloat()
+            val startHeight = startScale * finalBounds.height()
+            val deltaHeight = (startHeight - startBounds.height()) / 2
+            startBounds.top -= deltaHeight.toInt()
+            startBounds.bottom += deltaHeight.toInt()
+        }
+        return startScale
     }
 }
