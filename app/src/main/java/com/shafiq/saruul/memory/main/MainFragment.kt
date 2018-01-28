@@ -241,7 +241,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
 
 
     /**
-     * Adjusts bounds based on given memory card view and returns the start scale of the expanded
+     * Adjusts bounds based on given memory card view and returns the start scale for the expanded
      * image view.
      */
     private fun adjustBounds(memoryCardIndex: Int, startBounds: Rect, finalBounds: Rect): Float {
