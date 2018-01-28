@@ -18,12 +18,12 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.shafiq.saruul.memory.ActivityScoped
+import com.shafiq.saruul.memory.GlideApp
 import com.shafiq.saruul.memory.R
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -122,7 +122,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
                 return false
             }
         }
-        Glide.with(this)
+        GlideApp.with(this)
                 .load(filePath)
                 .listener(listener)
                 .into(memoryCards[memoryCardIndex].content)
