@@ -23,6 +23,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.shafiq.saruul.memory.ActivityScoped
+import com.shafiq.saruul.memory.GlideApp
 import com.shafiq.saruul.memory.R
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -141,7 +142,10 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         val memoryCard = memoryCards[memoryCardIndex]
 
         currentExpandedImageAnimator?.cancel()
-        expandedImage.setImageDrawable(memoryCard.content.drawable)
+        GlideApp.with(memoryCard)
+                .load(memoryCard.filePath)
+                .placeholder(memoryCard.content.drawable)
+                .into(expandedImage)
 
         val startBounds = Rect()
         val finalBounds = Rect()
