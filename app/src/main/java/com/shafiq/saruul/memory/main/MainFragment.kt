@@ -23,7 +23,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.shafiq.saruul.memory.ActivityScoped
-import com.shafiq.saruul.memory.GlideApp
 import com.shafiq.saruul.memory.R
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -122,10 +121,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
                 return false
             }
         }
-        GlideApp.with(this)
-                .load(filePath)
-                .listener(listener)
-                .into(memoryCards[memoryCardIndex].content)
+        memoryCards[memoryCardIndex].loadImage(filePath, listener)
     }
 
     @OnClick(R.id.main_new_game)

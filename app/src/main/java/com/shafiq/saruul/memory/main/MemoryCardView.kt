@@ -3,12 +3,15 @@ package com.shafiq.saruul.memory.main
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.ImageView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.bumptech.glide.request.RequestListener
+import com.shafiq.saruul.memory.GlideApp
 import com.shafiq.saruul.memory.R
 
 class MemoryCardView: FrameLayout {
@@ -21,6 +24,7 @@ class MemoryCardView: FrameLayout {
     lateinit var placeholder: ImageView
     @BindView(R.id.memory_card_view_content)
     lateinit var content: ImageView
+    var filePath: String? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -55,5 +59,13 @@ class MemoryCardView: FrameLayout {
             rightIn.start()
             rightOut.start()
         }
+    }
+
+    fun loadImage(filePath: String, listener: RequestListener<Drawable>) {
+        this.filePath = filePath
+        GlideApp.with(this)
+                .load(filePath)
+                .listener(listener)
+                .into(content)
     }
 }
