@@ -1,5 +1,6 @@
 package com.shafiq.saruul.memory.main
 
+import android.support.v7.app.AlertDialog
 import com.shafiq.saruul.memory.ActivityScoped
 import com.shafiq.saruul.memory.FragmentScoped
 import com.shafiq.saruul.memory.handlers.MemoryPermissionHandler
@@ -17,6 +18,12 @@ abstract class MainModule {
 
     @Module
     companion object {
+
+        @JvmStatic
+        @Provides
+        fun provideAlertDialogBuilder(mainActivity: MainActivity): AlertDialog.Builder {
+            return AlertDialog.Builder(mainActivity)
+        }
 
         @JvmStatic
         @Provides

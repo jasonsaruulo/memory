@@ -14,6 +14,8 @@ interface MainContract {
 
         fun showGameBoard()
 
+        fun showGameStoppingDialog()
+
         fun flipMemoryCard(memoryCardIndex: Int)
 
         fun numberOfTurns(numberOfTurns: Int)
@@ -45,5 +47,11 @@ interface MainContract {
         fun onMemoryCardClicked(memoryCardIndex: Int)
 
         fun onExpandedViewClicked(memoryCardIndex: Int)
+
+        /**
+         * Returns true if the back click should be treated normally, false if there is another
+         * logic handled by the presenter.
+         */
+        fun onBackPressed(): Boolean
     }
 }

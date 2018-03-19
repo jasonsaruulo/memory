@@ -7,6 +7,7 @@ import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,8 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     lateinit var presenter: MainContract.Presenter
     @Inject
     lateinit var memoryCards: MutableList<MemoryCardView>
+    @Inject
+    lateinit var alertDialogBuilder: AlertDialog.Builder
     @BindView(R.id.main_progress_bar)
     lateinit var progressBar: View
     @BindView(R.id.main_permission_explanation)
@@ -108,6 +111,12 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         numberOfTurns.visibility = View.VISIBLE
         gameBoard.visibility = View.VISIBLE
         newGame.visibility = View.VISIBLE
+    }
+
+    override fun showGameStoppingDialog() {
+        alertDialogBuilder.setTitle(R.string.main_game_stopping_title)
+        alertDialogBuilder.setMessage(R.string.main_game_stopping_message)
+        alertDialogBuilder.show()
     }
 
     override fun loadImage(memoryCardIndex: Int, filePath: String) {

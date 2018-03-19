@@ -199,4 +199,12 @@ class MainPresenter @Inject constructor(private val random: Random,
         }
         indexes.clear()
     }
+
+    override fun onBackPressed(): Boolean {
+        if (rightFlippedMemoryCardIndexes.size == numberOfMemoryCards) {
+            return true
+        }
+        view?.showGameStoppingDialog()
+        return false
+    }
 }
