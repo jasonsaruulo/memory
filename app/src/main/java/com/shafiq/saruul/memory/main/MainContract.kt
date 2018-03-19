@@ -16,6 +16,8 @@ interface MainContract {
 
         fun showGameStoppingDialog()
 
+        fun showMainMenu()
+
         fun flipMemoryCard(memoryCardIndex: Int)
 
         fun numberOfTurns(numberOfTurns: Int)
@@ -27,13 +29,9 @@ interface MainContract {
 
     interface Presenter: BasePresenter<View> {
 
-        fun showPermissionExplanation()
-
-        fun showProgressBar()
-
-        fun showGameBoard()
-
         fun newGame()
+
+        fun stopGame()
 
         fun onRequestPermissionsResult(
                 requestCode: Int, permissions: Array<out String>, grantResults: IntArray)

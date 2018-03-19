@@ -116,7 +116,19 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     override fun showGameStoppingDialog() {
         alertDialogBuilder.setTitle(R.string.main_game_stopping_title)
         alertDialogBuilder.setMessage(R.string.main_game_stopping_message)
+        alertDialogBuilder.setPositiveButton(R.string.main_game_stopping_positive_button, { _, _ ->
+            presenter.stopGame()
+        })
+        alertDialogBuilder.setNegativeButton(R.string.main_game_stopping_negative_button, null)
         alertDialogBuilder.show()
+    }
+
+    override fun showMainMenu() {
+        progressBar.visibility = View.INVISIBLE
+        permissionExplanation.visibility = View.INVISIBLE
+        numberOfTurns.visibility = View.INVISIBLE
+        gameBoard.visibility = View.INVISIBLE
+        newGame.visibility = View.VISIBLE
     }
 
     override fun loadImage(memoryCardIndex: Int, filePath: String) {

@@ -22,6 +22,7 @@ class MainPresenter @Inject constructor(private val random: Random,
     private val maxNumberOfFlippedMemoryCards = 2
     private var numberOfTurns = 0
     private var expandedMemoryCardIndex = Int.MIN_VALUE
+    private var gameIsRunning = false
 
     override fun takeView(view: MainContract.View) {
         this.view = view
@@ -31,24 +32,21 @@ class MainPresenter @Inject constructor(private val random: Random,
         view = null
     }
 
-    override fun showPermissionExplanation() {
+    private fun showPermissionExplanation() {
         view?.showPermissionExplanation()
     }
 
-    override fun showProgressBar() {
+    private fun showProgressBar() {
         view?.showProgressBar()
     }
 
-    override fun showGameBoard() {
+    private fun showGameBoard() {
+        gameIsRunning = true
         view?.showGameBoard()
     }
 
     override fun newGame() {
-        numberOfTurns = 0
-        view?.numberOfTurns(numberOfTurns)
-        memoryCardIndexesMapping.clear()
-        flipBackCurrentlyFlippedMemoryCards()
-        flipBackRightFlippedMemoryCards()
+        reset()
         if (!permissionHandler.permissionReadExternalStorageGranted()) {
             if (permissionHandler.shouldShowRequestPermissionRationale()) {
                 showPermissionExplanation()
@@ -58,6 +56,21 @@ class MainPresenter @Inject constructor(private val random: Random,
         } else {
             loadFilePaths()
         }
+    }
+
+    override fun stopGame() {
+        reset()
+        view?.showMainMenu()
+    }
+
+    private fun reset() {
+        gameIsRunning = false
+        numberOfTurns = 0
+        view?.numberOfTurns(numberOfTurns)
+        memoryCardIndexesMapping.clear()
+        flipBackCurrentlyFlippedMemoryCards()
+        flipBackRightFlippedMemoryCards()
+        resetUnusedIndexes()
     }
 
     override fun onRequestPermissionsResult(
@@ -208,13 +221,12 @@ class MainPresenter @Inject constructor(private val random: Random,
     }
 
     override fun onBackPressed(): Boolean {
-        if (onExpandedViewClicked()) {
+        if (gameIsRunning) {
+            if (!onExpandedViewClicked()) {
+                view?.showGameStoppingDialog()
+            }
             return false
         }
-        if (rightFlippedMemoryCardIndexes.size == numberOfMemoryCards) {
-            return true
-        }
-        view?.showGameStoppingDialog()
-        return false
+        return true
     }
 }
