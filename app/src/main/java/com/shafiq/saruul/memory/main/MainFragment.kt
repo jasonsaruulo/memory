@@ -199,7 +199,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         set.start()
         currentExpandedImageAnimator = set
         expandedImage.setOnClickListener {
-            presenter.onExpandedViewClicked(memoryCardIndex)
+            presenter.onExpandedViewClicked()
         }
     }
 

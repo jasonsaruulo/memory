@@ -46,7 +46,11 @@ interface MainContract {
 
         fun onMemoryCardClicked(memoryCardIndex: Int)
 
-        fun onExpandedViewClicked(memoryCardIndex: Int)
+        /**
+         * Tries to minimize the expanded view. Returns true if a minimization was started, false
+         * otherwise (if view was not expanded).
+         */
+        fun onExpandedViewClicked(): Boolean
 
         /**
          * Returns true if the back click should be treated normally, false if there is another

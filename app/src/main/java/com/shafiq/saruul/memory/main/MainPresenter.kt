@@ -21,6 +21,7 @@ class MainPresenter @Inject constructor(private val random: Random,
     private val rightFlippedMemoryCardIndexes = mutableSetOf<Int>()
     private val maxNumberOfFlippedMemoryCards = 2
     private var numberOfTurns = 0
+    private var expandedMemoryCardIndex = Int.MIN_VALUE
 
     override fun takeView(view: MainContract.View) {
         this.view = view
@@ -152,6 +153,7 @@ class MainPresenter @Inject constructor(private val random: Random,
         if (rightFlippedMemoryCardIndexes.contains(memoryCardIndex) ||
                 currentlyFlippedMemoryCardIndexes.contains(memoryCardIndex)) {
             view?.expandMemoryCard(memoryCardIndex)
+            expandedMemoryCardIndex = memoryCardIndex
             return
         }
         if (currentlyFlippedMemoryCardIndexes.size >= maxNumberOfFlippedMemoryCards) {
@@ -181,8 +183,13 @@ class MainPresenter @Inject constructor(private val random: Random,
         }
     }
 
-    override fun onExpandedViewClicked(memoryCardIndex: Int) {
-        view?.minimizeMemoryCard(memoryCardIndex)
+    override fun onExpandedViewClicked(): Boolean {
+        if (expandedMemoryCardIndex >= 0) {
+            view?.minimizeMemoryCard(expandedMemoryCardIndex)
+            expandedMemoryCardIndex = Int.MIN_VALUE
+            return true
+        }
+        return false
     }
 
     private fun flipBackCurrentlyFlippedMemoryCards() {
@@ -201,6 +208,9 @@ class MainPresenter @Inject constructor(private val random: Random,
     }
 
     override fun onBackPressed(): Boolean {
+        if (onExpandedViewClicked()) {
+            return false
+        }
         if (rightFlippedMemoryCardIndexes.size == numberOfMemoryCards) {
             return true
         }
