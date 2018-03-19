@@ -110,7 +110,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         permissionExplanation.visibility = View.INVISIBLE
         numberOfTurns.visibility = View.VISIBLE
         gameBoard.visibility = View.VISIBLE
-        newGame.visibility = View.VISIBLE
+        newGame.visibility = View.INVISIBLE
     }
 
     override fun showGameStoppingDialog() {
