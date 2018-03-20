@@ -12,14 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.TableLayout
 import android.widget.TableRow
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -29,6 +22,7 @@ import com.shafiq.saruul.memory.GlideApp
 import com.shafiq.saruul.memory.R
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.memory_card_view.view.*
 import javax.inject.Inject
 
 @ActivityScoped
@@ -40,22 +34,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     lateinit var memoryCards: MutableList<MemoryCardView>
     @Inject
     lateinit var alertDialogBuilder: AlertDialog.Builder
-    @BindView(R.id.main_progress_bar)
-    lateinit var progressBar: View
-    @BindView(R.id.main_permission_explanation)
-    lateinit var permissionExplanation: View
-    @BindView(R.id.main_number_of_turns)
-    lateinit var numberOfTurns: TextView
-    @BindView(R.id.main_game_board)
-    lateinit var gameBoard: TableLayout
-    @BindView(R.id.main_number_of_memory_cards_description)
-    lateinit var numberOfMemoryCardsDescription: View
-    @BindView(R.id.main_number_of_memory_cards)
-    lateinit var numberOfMemoryCards: Spinner
-    @BindView(R.id.main_new_game)
-    lateinit var newGame: View
-    @BindView(R.id.main_expanded_image)
-    lateinit var expandedImage: ImageView
+
     private var currentExpandedImageAnimator: Animator? = null
     private var expandImageAnimationDuration: Long? = null
     private val numberOfMemoryCardsPerRow = 6
@@ -63,31 +42,33 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        val view = inflater.inflate(R.layout.fragment_main, container, false)
-        ButterKnife.bind(this, view)
-        var i = 0
-        while (i < gameBoard.childCount) {
-            val row = gameBoard.getChildAt(i) as TableRow
-            var j = 0
-            while (j < row.childCount) {
-                val memoryCard = row.getChildAt(j) as MemoryCardView
-                memoryCard.setOnClickListener {
-                    presenter.onMemoryCardClicked(memoryCards.indexOf(memoryCard))
-                }
-                memoryCards.add(memoryCard)
-                j++
-            }
-            i++
-        }
-        numberOfTurns(0)
         expandImageAnimationDuration =
                 resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-        return view
+        return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
     override fun onResume() {
         super.onResume()
         presenter.takeView(this)
+        if (memoryCards.isEmpty()) {
+            var i = 0
+            while (i < main_game_board.childCount) {
+                val row = main_game_board.getChildAt(i) as TableRow
+                var j = 0
+                while (j < row.childCount) {
+                    val memoryCard = row.getChildAt(j) as MemoryCardView
+                    memoryCard.setOnClickListener {
+                        presenter.onMemoryCardClicked(memoryCards.indexOf(memoryCard))
+                    }
+                    memoryCards.add(memoryCard)
+                    j++
+                }
+                i++
+            }
+            main_new_game.setOnClickListener {
+                newGame()
+            }
+        }
     }
 
     override fun onPause() {
@@ -96,33 +77,33 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     }
 
     override fun showPermissionExplanation() {
-        progressBar.visibility = View.INVISIBLE
-        permissionExplanation.visibility = View.VISIBLE
-        numberOfTurns.visibility = View.INVISIBLE
-        gameBoard.visibility = View.INVISIBLE
-        numberOfMemoryCardsDescription.visibility = View.VISIBLE
-        numberOfMemoryCards.visibility = View.VISIBLE
-        newGame.visibility = View.VISIBLE
+        main_progress_bar.visibility = View.INVISIBLE
+        main_permission_explanation.visibility = View.VISIBLE
+        main_number_of_turns.visibility = View.INVISIBLE
+        main_game_board.visibility = View.INVISIBLE
+        main_number_of_memory_cards_description.visibility = View.VISIBLE
+        main_number_of_memory_cards.visibility = View.VISIBLE
+        main_new_game.visibility = View.VISIBLE
     }
 
     override fun showProgressBar() {
-        progressBar.visibility = View.VISIBLE
-        permissionExplanation.visibility = View.INVISIBLE
-        numberOfTurns.visibility = View.INVISIBLE
-        gameBoard.visibility = View.INVISIBLE
-        numberOfMemoryCardsDescription.visibility = View.INVISIBLE
-        numberOfMemoryCards.visibility = View.INVISIBLE
-        newGame.visibility = View.INVISIBLE
+        main_progress_bar.visibility = View.VISIBLE
+        main_permission_explanation.visibility = View.INVISIBLE
+        main_number_of_turns.visibility = View.INVISIBLE
+        main_game_board.visibility = View.INVISIBLE
+        main_number_of_memory_cards_description.visibility = View.INVISIBLE
+        main_number_of_memory_cards.visibility = View.INVISIBLE
+        main_new_game.visibility = View.INVISIBLE
     }
 
     override fun showGameBoard() {
-        progressBar.visibility = View.INVISIBLE
-        permissionExplanation.visibility = View.INVISIBLE
-        numberOfTurns.visibility = View.VISIBLE
-        gameBoard.visibility = View.VISIBLE
-        numberOfMemoryCardsDescription.visibility = View.INVISIBLE
-        numberOfMemoryCards.visibility = View.INVISIBLE
-        newGame.visibility = View.INVISIBLE
+        main_progress_bar.visibility = View.INVISIBLE
+        main_permission_explanation.visibility = View.INVISIBLE
+        main_number_of_turns.visibility = View.VISIBLE
+        main_game_board.visibility = View.VISIBLE
+        main_number_of_memory_cards_description.visibility = View.INVISIBLE
+        main_number_of_memory_cards.visibility = View.INVISIBLE
+        main_new_game.visibility = View.INVISIBLE
     }
 
     override fun showGameStoppingDialog() {
@@ -136,13 +117,13 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     }
 
     override fun showMainMenu() {
-        progressBar.visibility = View.INVISIBLE
-        permissionExplanation.visibility = View.INVISIBLE
-        numberOfTurns.visibility = View.INVISIBLE
-        gameBoard.visibility = View.INVISIBLE
-        numberOfMemoryCardsDescription.visibility = View.VISIBLE
-        numberOfMemoryCards.visibility = View.VISIBLE
-        newGame.visibility = View.VISIBLE
+        main_progress_bar.visibility = View.INVISIBLE
+        main_permission_explanation.visibility = View.INVISIBLE
+        main_number_of_turns.visibility = View.INVISIBLE
+        main_game_board.visibility = View.INVISIBLE
+        main_number_of_memory_cards_description.visibility = View.VISIBLE
+        main_number_of_memory_cards.visibility = View.VISIBLE
+        main_new_game.visibility = View.VISIBLE
     }
 
     override fun loadImage(memoryCardIndex: Int, filePath: String) {
@@ -160,20 +141,19 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         memoryCards[memoryCardIndex].loadImage(filePath, listener)
     }
 
-    @OnClick(R.id.main_new_game)
-    fun newGame() {
+    private fun newGame() {
         var i = 0
-        while (i < numberOfMemoryCards.selectedItemPosition + 1) {
-            val row = gameBoard.getChildAt(i) as TableRow
+        while (i < main_number_of_memory_cards.selectedItemPosition + 1) {
+            val row = main_game_board.getChildAt(i) as TableRow
             row.visibility = View.VISIBLE
             i++
         }
-        while (i < gameBoard.childCount) {
-            val row = gameBoard.getChildAt(i) as TableRow
+        while (i < main_game_board.childCount) {
+            val row = main_game_board.getChildAt(i) as TableRow
             row.visibility = View.GONE
             i++
         }
-        presenter.newGame((numberOfMemoryCards.selectedItemPosition + 1) * numberOfMemoryCardsPerRow)
+        presenter.newGame((main_number_of_memory_cards.selectedItemPosition + 1) * numberOfMemoryCardsPerRow)
     }
 
     override fun flipMemoryCard(memoryCardIndex: Int) {
@@ -181,7 +161,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     }
 
     override fun numberOfTurns(numberOfTurns: Int) {
-        this.numberOfTurns.text = resources.getString(R.string.main_number_of_turns, numberOfTurns)
+        main_number_of_turns.text = resources.getString(R.string.main_number_of_turns, numberOfTurns)
     }
 
     override fun expandMemoryCard(memoryCardIndex: Int) {
@@ -190,18 +170,18 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         currentExpandedImageAnimator?.cancel()
         GlideApp.with(memoryCard)
                 .load(memoryCard.filePath)
-                .placeholder(memoryCard.content.drawable)
-                .into(expandedImage)
+                .placeholder(memoryCard.memory_card_view_content.drawable)
+                .into(main_expanded_image)
 
         val startBounds = Rect()
         val finalBounds = Rect()
 
         val startScale = adjustBounds(memoryCardIndex, startBounds, finalBounds)
         memoryCard.alpha = 0f
-        expandedImage.visibility = View.VISIBLE
+        main_expanded_image.visibility = View.VISIBLE
 
-        expandedImage.pivotX = 0f
-        expandedImage.pivotY = 0f
+        main_expanded_image.pivotX = 0f
+        main_expanded_image.pivotY = 0f
 
         // For better readability
         val startLeft = startBounds.left.toFloat()
@@ -210,10 +190,10 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         val finalTop = finalBounds.top.toFloat()
 
         val set = AnimatorSet()
-        set.play(ObjectAnimator.ofFloat(expandedImage, View.X, startLeft, finalLeft))
-                .with(ObjectAnimator.ofFloat(expandedImage, View.Y, startTop, finalTop))
-                .with(ObjectAnimator.ofFloat(expandedImage, View.SCALE_X, startScale, 1f))
-                .with(ObjectAnimator.ofFloat(expandedImage, View.SCALE_Y, startScale, 1f))
+        set.play(ObjectAnimator.ofFloat(main_expanded_image, View.X, startLeft, finalLeft))
+                .with(ObjectAnimator.ofFloat(main_expanded_image, View.Y, startTop, finalTop))
+                .with(ObjectAnimator.ofFloat(main_expanded_image, View.SCALE_X, startScale, 1f))
+                .with(ObjectAnimator.ofFloat(main_expanded_image, View.SCALE_Y, startScale, 1f))
         if (expandImageAnimationDuration != null) {
             set.duration = expandImageAnimationDuration!!
         }
@@ -235,7 +215,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         })
         set.start()
         currentExpandedImageAnimator = set
-        expandedImage.setOnClickListener {
+        main_expanded_image.setOnClickListener {
             presenter.onExpandedViewClicked()
         }
     }
@@ -252,10 +232,10 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         val startTop = startBounds.top.toFloat()
 
         val set = AnimatorSet()
-        set.play(ObjectAnimator.ofFloat(expandedImage, View.X, startLeft))
-                .with(ObjectAnimator.ofFloat(expandedImage, View.Y, startTop))
-                .with(ObjectAnimator.ofFloat(expandedImage, View.SCALE_X, startScale))
-                .with(ObjectAnimator.ofFloat(expandedImage, View.SCALE_Y, startScale))
+        set.play(ObjectAnimator.ofFloat(main_expanded_image, View.X, startLeft))
+                .with(ObjectAnimator.ofFloat(main_expanded_image, View.Y, startTop))
+                .with(ObjectAnimator.ofFloat(main_expanded_image, View.SCALE_X, startScale))
+                .with(ObjectAnimator.ofFloat(main_expanded_image, View.SCALE_Y, startScale))
         if (expandImageAnimationDuration != null) {
             set.duration = expandImageAnimationDuration!!
         }
@@ -281,7 +261,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
 
     private fun onMinimizeAnimationEnd(memoryCardIndex: Int) {
         memoryCards[memoryCardIndex].alpha = 1f
-        expandedImage.visibility = View.GONE
+        main_expanded_image.visibility = View.GONE
         currentExpandedImageAnimator = null
     }
 

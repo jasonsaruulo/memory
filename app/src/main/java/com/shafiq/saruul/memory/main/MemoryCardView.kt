@@ -7,12 +7,10 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import android.widget.ImageView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.bumptech.glide.request.RequestListener
 import com.shafiq.saruul.memory.GlideApp
 import com.shafiq.saruul.memory.R
+import kotlinx.android.synthetic.main.memory_card_view.view.*
 
 class MemoryCardView: FrameLayout {
 
@@ -20,10 +18,6 @@ class MemoryCardView: FrameLayout {
     private val leftOut: Animator
     private val rightIn: Animator
     private val rightOut: Animator
-    @BindView(R.id.memory_card_view_placeholder)
-    lateinit var placeholder: ImageView
-    @BindView(R.id.memory_card_view_content)
-    lateinit var content: ImageView
     var filePath: String? = null
 
     constructor(context: Context) : this(context, null)
@@ -31,28 +25,26 @@ class MemoryCardView: FrameLayout {
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
             super(context, attrs, defStyleAttr) {
-        val view = LayoutInflater.from(context)
-                .inflate(R.layout.memory_card_view, this, true)
-        ButterKnife.bind(this, view)
+        LayoutInflater.from(context).inflate(R.layout.memory_card_view, this, true)
         leftIn = AnimatorInflater.loadAnimator(context, R.animator.card_flip_left_in)
-        leftIn.setTarget(content)
+        leftIn.setTarget(memory_card_view_content)
         leftOut = AnimatorInflater.loadAnimator(context, R.animator.card_flip_left_out)
-        leftOut.setTarget(placeholder)
+        leftOut.setTarget(memory_card_view_placeholder)
         rightIn = AnimatorInflater.loadAnimator(context, R.animator.card_flip_right_in)
-        rightIn.setTarget(placeholder)
+        rightIn.setTarget(memory_card_view_placeholder)
         rightOut = AnimatorInflater.loadAnimator(context, R.animator.card_flip_right_out)
-        rightOut.setTarget(content)
+        rightOut.setTarget(memory_card_view_content)
     }
 
     fun flip() {
-        if (content.drawable == null) {
+        if (memory_card_view_content.drawable == null) {
             return
         }
         leftIn.end()
         leftOut.end()
         rightIn.end()
         rightOut.end()
-        if (content.alpha == 0f) {
+        if (memory_card_view_content.alpha == 0f) {
             leftIn.start()
             leftOut.start()
         } else {
@@ -66,6 +58,6 @@ class MemoryCardView: FrameLayout {
         GlideApp.with(this)
                 .load(filePath)
                 .listener(listener)
-                .into(content)
+                .into(memory_card_view_content)
     }
 }
