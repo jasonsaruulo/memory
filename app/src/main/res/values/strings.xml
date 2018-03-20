@@ -3,6 +3,7 @@
 
     <!-- Main -->
     <string name="main_number_of_turns">Number of turns: %d</string>
+    <string name="main_number_of_memory_cards">Number of memory cards:</string>
     <string name="main_new_game">New game</string>
     <string name="main_read_external_storage_permission_explanation">You have to grant the app permission to read your external storage. Otherwise the app cannot load your images for the game. Please go to settings and grant the permission.</string>
     <string name="main_game_stopping_title">Stop game?</string>

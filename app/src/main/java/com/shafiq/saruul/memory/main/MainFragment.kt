@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -47,12 +48,17 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
     lateinit var numberOfTurns: TextView
     @BindView(R.id.main_game_board)
     lateinit var gameBoard: TableLayout
+    @BindView(R.id.main_number_of_memory_cards_description)
+    lateinit var numberOfMemoryCardsDescription: View
+    @BindView(R.id.main_number_of_memory_cards)
+    lateinit var numberOfMemoryCards: Spinner
     @BindView(R.id.main_new_game)
     lateinit var newGame: View
     @BindView(R.id.main_expanded_image)
     lateinit var expandedImage: ImageView
     private var currentExpandedImageAnimator: Animator? = null
     private var expandImageAnimationDuration: Long? = null
+    private val numberOfMemoryCardsPerRow = 6
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -94,6 +100,8 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         permissionExplanation.visibility = View.VISIBLE
         numberOfTurns.visibility = View.INVISIBLE
         gameBoard.visibility = View.INVISIBLE
+        numberOfMemoryCardsDescription.visibility = View.VISIBLE
+        numberOfMemoryCards.visibility = View.VISIBLE
         newGame.visibility = View.VISIBLE
     }
 
@@ -102,6 +110,8 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         permissionExplanation.visibility = View.INVISIBLE
         numberOfTurns.visibility = View.INVISIBLE
         gameBoard.visibility = View.INVISIBLE
+        numberOfMemoryCardsDescription.visibility = View.INVISIBLE
+        numberOfMemoryCards.visibility = View.INVISIBLE
         newGame.visibility = View.INVISIBLE
     }
 
@@ -110,6 +120,8 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         permissionExplanation.visibility = View.INVISIBLE
         numberOfTurns.visibility = View.VISIBLE
         gameBoard.visibility = View.VISIBLE
+        numberOfMemoryCardsDescription.visibility = View.INVISIBLE
+        numberOfMemoryCards.visibility = View.INVISIBLE
         newGame.visibility = View.INVISIBLE
     }
 
@@ -128,6 +140,8 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         permissionExplanation.visibility = View.INVISIBLE
         numberOfTurns.visibility = View.INVISIBLE
         gameBoard.visibility = View.INVISIBLE
+        numberOfMemoryCardsDescription.visibility = View.VISIBLE
+        numberOfMemoryCards.visibility = View.VISIBLE
         newGame.visibility = View.VISIBLE
     }
 
@@ -148,7 +162,18 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
 
     @OnClick(R.id.main_new_game)
     fun newGame() {
-        presenter.newGame()
+        var i = 0
+        while (i < numberOfMemoryCards.selectedItemPosition + 1) {
+            val row = gameBoard.getChildAt(i) as TableRow
+            row.visibility = View.VISIBLE
+            i++
+        }
+        while (i < gameBoard.childCount) {
+            val row = gameBoard.getChildAt(i) as TableRow
+            row.visibility = View.GONE
+            i++
+        }
+        presenter.newGame((numberOfMemoryCards.selectedItemPosition + 1) * numberOfMemoryCardsPerRow)
     }
 
     override fun flipMemoryCard(memoryCardIndex: Int) {

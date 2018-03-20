@@ -29,16 +29,12 @@ interface MainContract {
 
     interface Presenter: BasePresenter<View> {
 
-        fun newGame()
+        fun newGame(numberOfMemoryCards: Int)
 
         fun stopGame()
 
         fun onRequestPermissionsResult(
                 requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
-
-        fun loadFilePaths()
-
-        fun loadImages()
 
         fun onImageLoaded(success: Boolean, memoryCardIndex: Int)
 

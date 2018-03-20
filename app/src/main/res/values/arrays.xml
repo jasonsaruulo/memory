@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="number_of_memory_cards">
+        <item>1 x 6 = 6</item>
+        <item>2 x 6 = 12</item>
+        <item>3 x 6 = 18</item>
+        <item>4 x 6 = 24</item>
+        <item>5 x 6 = 30</item>
+        <item>6 x 6 = 36</item>
+    </string-array>
+</resources>

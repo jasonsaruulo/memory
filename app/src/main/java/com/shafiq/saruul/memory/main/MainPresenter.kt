@@ -14,7 +14,7 @@ class MainPresenter @Inject constructor(private val random: Random,
         MainContract.Presenter {
 
     private var view: MainContract.View? = null
-    private val numberOfMemoryCards = 12
+    private var numberOfMemoryCards = 12
     private var numberOfImagesLoaded = 0
     private val memoryCardIndexesMapping = mutableMapOf<Int, Int>()
     private val currentlyFlippedMemoryCardIndexes = mutableSetOf<Int>()
@@ -45,8 +45,9 @@ class MainPresenter @Inject constructor(private val random: Random,
         view?.showGameBoard()
     }
 
-    override fun newGame() {
+    override fun newGame(numberOfMemoryCards: Int) {
         reset()
+        this.numberOfMemoryCards = numberOfMemoryCards
         if (!permissionHandler.permissionReadExternalStorageGranted()) {
             if (permissionHandler.shouldShowRequestPermissionRationale()) {
                 showPermissionExplanation()
@@ -54,7 +55,7 @@ class MainPresenter @Inject constructor(private val random: Random,
                 permissionHandler.requestReadExternalStoragePermission()
             }
         } else {
-            loadFilePaths()
+            loadImages()
         }
     }
 
@@ -81,22 +82,18 @@ class MainPresenter @Inject constructor(private val random: Random,
         when (requestCode) {
             PermissionHandler.readExternalStoragePermissionRequest ->
                 if (grantResults.first() == PackageManager.PERMISSION_GRANTED) {
-                    loadFilePaths()
+                    loadImages()
                 } else {
                     showPermissionExplanation()
                 }
         }
     }
 
-    override fun loadFilePaths() {
+    private fun loadImages() {
         showProgressBar()
         if (filePaths.isEmpty() || filePaths.size < numberOfMemoryCards) {
             filePaths.addAll(storageHandler.getAllImagePaths())
         }
-        loadImages()
-    }
-
-    override fun loadImages() {
         numberOfImagesLoaded = 0
         if (filePaths.size >= numberOfMemoryCards) {
             resetUnusedIndexes()

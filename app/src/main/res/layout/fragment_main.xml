@@ -12,22 +12,43 @@
         android:layout_centerInParent="true"
         android:visibility="invisible" />
 
-    <TextView
-        android:id="@+id/main_permission_explanation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:text="@string/main_read_external_storage_permission_explanation"
-        android:gravity="center" />
-
     <Button
         android:id="@+id/main_new_game"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
         android:layout_margin="@dimen/main_button_margin"
         android:text="@string/main_new_game" />
+
+    <Spinner
+        android:id="@+id/main_number_of_memory_cards"
+        android:entries="@array/number_of_memory_cards"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/main_new_game" />
+
+    <TextView
+        android:id="@+id/main_number_of_memory_cards_description"
+        android:text="@string/main_number_of_memory_cards"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/main_number_of_memory_cards"
+        android:layout_toStartOf="@id/main_number_of_memory_cards"
+        android:layout_above="@id/main_new_game" />
+
+    <TextView
+        android:id="@+id/main_permission_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_new_game"
+        android:visibility="invisible"
+        android:text="@string/main_read_external_storage_permission_explanation"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/main_number_of_turns"
@@ -71,6 +92,53 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
@@ -98,6 +166,16 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
@@ -105,6 +183,90 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center">
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <com.shafiq.saruul.memory.main.MemoryCardView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
 
             <com.shafiq.saruul.memory.main.MemoryCardView
                 android:layout_weight="1"
