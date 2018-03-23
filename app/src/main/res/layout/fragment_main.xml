@@ -47,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/main_new_game"
         android:visibility="invisible"
+        android:textColor="@color/main_error_message"
         android:gravity="center" />
 
     <TextView
