@@ -8,7 +8,9 @@ interface MainContract {
 
         fun loadImage(memoryCardIndex: Int, filePath: String)
 
-        fun showPermissionExplanation()
+        fun showReadExternalStoragePermissionMissingError()
+
+        fun showNotEnoughImagesError()
 
         fun showProgressBar()
 

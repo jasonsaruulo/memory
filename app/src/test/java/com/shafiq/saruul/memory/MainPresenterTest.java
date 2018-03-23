@@ -52,7 +52,7 @@ public class MainPresenterTest {
         presenter.newGame(NUMBER_OF_MEMORY_CARDS);
 
         verify(permissionHandler, times(0)).requestReadExternalStoragePermission();
-        verify(view, times(1)).showPermissionExplanation();
+        verify(view, times(1)).showReadExternalStoragePermissionMissingError();
     }
 
     @Test
@@ -66,7 +66,7 @@ public class MainPresenterTest {
         presenter.newGame(NUMBER_OF_MEMORY_CARDS);
 
         verify(permissionHandler, times(1)).requestReadExternalStoragePermission();
-        verify(view, times(0)).showPermissionExplanation();
+        verify(view, times(0)).showReadExternalStoragePermissionMissingError();
     }
 
     @Test
@@ -80,6 +80,8 @@ public class MainPresenterTest {
         presenter.newGame(NUMBER_OF_MEMORY_CARDS);
 
         verify(view, times(1)).showProgressBar();
+        verify(view, times(1)).showNotEnoughImagesError();
+        verify(view, times(0)).showGameBoard();
         verify(storageHandler, times(1)).getAllImagePaths();
     }
 
@@ -95,6 +97,7 @@ public class MainPresenterTest {
         presenter.newGame(NUMBER_OF_MEMORY_CARDS);
 
         verify(view, times(1)).showProgressBar();
+        verify(view, times(1)).showNotEnoughImagesError();
         verify(view, times(0)).showGameBoard();
         verify(storageHandler, times(1)).getAllImagePaths();
     }

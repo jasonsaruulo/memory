@@ -76,9 +76,18 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
         super.onPause()
     }
 
-    override fun showPermissionExplanation() {
+    override fun showReadExternalStoragePermissionMissingError() {
+        showErrorMessage(R.string.main_read_external_storage_permission_missing_error)
+    }
+
+    override fun showNotEnoughImagesError() {
+        showErrorMessage(R.string.main_not_enough_images_error)
+    }
+
+    private fun showErrorMessage(resId: Int) {
         main_progress_bar.visibility = View.INVISIBLE
-        main_permission_explanation.visibility = View.VISIBLE
+        main_error_message.visibility = View.VISIBLE
+        main_error_message.setText(resId)
         main_number_of_turns.visibility = View.INVISIBLE
         main_game_board.visibility = View.INVISIBLE
         main_number_of_memory_cards_description.visibility = View.VISIBLE
@@ -88,7 +97,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
 
     override fun showProgressBar() {
         main_progress_bar.visibility = View.VISIBLE
-        main_permission_explanation.visibility = View.INVISIBLE
+        main_error_message.visibility = View.INVISIBLE
         main_number_of_turns.visibility = View.INVISIBLE
         main_game_board.visibility = View.INVISIBLE
         main_number_of_memory_cards_description.visibility = View.INVISIBLE
@@ -98,7 +107,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
 
     override fun showGameBoard() {
         main_progress_bar.visibility = View.INVISIBLE
-        main_permission_explanation.visibility = View.INVISIBLE
+        main_error_message.visibility = View.INVISIBLE
         main_number_of_turns.visibility = View.VISIBLE
         main_game_board.visibility = View.VISIBLE
         main_number_of_memory_cards_description.visibility = View.INVISIBLE
@@ -118,7 +127,7 @@ class MainFragment @Inject constructor(): DaggerFragment(), MainContract.View {
 
     override fun showMainMenu() {
         main_progress_bar.visibility = View.INVISIBLE
-        main_permission_explanation.visibility = View.INVISIBLE
+        main_error_message.visibility = View.INVISIBLE
         main_number_of_turns.visibility = View.INVISIBLE
         main_game_board.visibility = View.INVISIBLE
         main_number_of_memory_cards_description.visibility = View.VISIBLE

@@ -42,12 +42,11 @@
         android:layout_above="@id/main_new_game" />
 
     <TextView
-        android:id="@+id/main_permission_explanation"
+        android:id="@+id/main_error_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/main_new_game"
         android:visibility="invisible"
-        android:text="@string/main_read_external_storage_permission_explanation"
         android:gravity="center" />
 
     <TextView

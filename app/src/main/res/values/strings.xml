@@ -5,7 +5,8 @@
     <string name="main_number_of_turns">Number of turns: %d</string>
     <string name="main_number_of_memory_cards">Number of memory cards:</string>
     <string name="main_new_game">New game</string>
-    <string name="main_read_external_storage_permission_explanation">You have to grant the app permission to read your external storage. Otherwise the app cannot load your images for the game. Please go to settings and grant the permission.</string>
+    <string name="main_read_external_storage_permission_missing_error">You have to grant the app permission to read your external storage. Otherwise the app cannot load your images for the game. Please go to settings and grant the permission.</string>
+    <string name="main_not_enough_images_error">You have not enough images on your phone to play with this field size.</string>
     <string name="main_game_stopping_title">Stop game?</string>
     <string name="main_game_stopping_message">Do you really want to stop the game? You cannot continue the game afterwards.</string>
     <string name="main_game_stopping_positive_button">Stop game</string>

@@ -32,10 +32,6 @@ class MainPresenter @Inject constructor(private val random: Random,
         view = null
     }
 
-    private fun showPermissionExplanation() {
-        view?.showPermissionExplanation()
-    }
-
     private fun showProgressBar() {
         view?.showProgressBar()
     }
@@ -50,7 +46,7 @@ class MainPresenter @Inject constructor(private val random: Random,
         this.numberOfMemoryCards = numberOfMemoryCards
         if (!permissionHandler.permissionReadExternalStorageGranted()) {
             if (permissionHandler.shouldShowRequestPermissionRationale()) {
-                showPermissionExplanation()
+                view?.showReadExternalStoragePermissionMissingError()
             } else {
                 permissionHandler.requestReadExternalStoragePermission()
             }
@@ -84,7 +80,7 @@ class MainPresenter @Inject constructor(private val random: Random,
                 if (grantResults.first() == PackageManager.PERMISSION_GRANTED) {
                     loadImages()
                 } else {
-                    showPermissionExplanation()
+                    view?.showReadExternalStoragePermissionMissingError()
                 }
         }
     }
@@ -108,7 +104,7 @@ class MainPresenter @Inject constructor(private val random: Random,
                 i += 2
             }
         } else {
-            // TODO: Show error message
+            view?.showNotEnoughImagesError()
         }
     }
 
